@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ajay46639.github.io/AI-Created-PortFolio/sitemap.xml
