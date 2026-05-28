@@ -474,7 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentActiveIndex = 1; // Start with card 1 ("AI Chatbot Interface") as active
         const totalSlides = slides.length;
         let autoPlayInterval = null;
-        let playDirection = 1; // 1 for forward, -1 for backward
 
         function updateCarousel() {
             // In an infinite carousel, navigation buttons are always fully active and clickable
@@ -489,6 +488,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const leftIdx = (currentActiveIndex - 1 + totalSlides) % totalSlides;
             const rightIdx = (currentActiveIndex + 1) % totalSlides;
+            const leftFarIdx = (currentActiveIndex - 2 + totalSlides) % totalSlides;
+            const rightFarIdx = (currentActiveIndex + 2) % totalSlides;
 
             slides.forEach((slide, idx) => {
                 // Clear state classes
@@ -500,14 +501,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     slide.classList.add('left-behind');
                 } else if (idx === rightIdx) {
                     slide.classList.add('right-behind');
+                } else if (idx === leftFarIdx) {
+                    slide.classList.add('disappeared-left');
+                } else if (idx === rightFarIdx) {
+                    slide.classList.add('disappeared-right');
                 } else {
-                    // Symmetrical circle distribution for others
-                    const distClockwise = (idx - currentActiveIndex + totalSlides) % totalSlides;
-                    if (distClockwise > totalSlides / 2) {
-                        slide.classList.add('disappeared-left');
-                    } else {
-                        slide.classList.add('disappeared-right');
-                    }
+                    slide.classList.add('hidden-slide');
                 }
             });
         }
@@ -547,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
             autoPlayInterval = setInterval(() => {
                 currentActiveIndex = (currentActiveIndex + 1) % totalSlides;
                 updateCarousel();
-            }, 3000); // Cinematic timing
+            }, 3500); // Cinematic timing
         }
 
         function stopAutoPlay() {
@@ -562,6 +561,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Pause autoplay on mouse hover
         carouselContainer.addEventListener('mouseenter', stopAutoPlay);
         carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+        // --- Smooth Wheel Interaction ---
+        let lastWheelTime = 0;
+        carouselContainer.addEventListener('wheel', (e) => {
+            const now = Date.now();
+            if (now - lastWheelTime < 600) return; // Prevent frantic spinning, look premium
+
+            if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                e.preventDefault();
+            }
+
+            if (e.deltaY > 15 || e.deltaX > 15) {
+                currentActiveIndex = (currentActiveIndex + 1) % totalSlides;
+                updateCarousel();
+                lastWheelTime = now;
+            } else if (e.deltaY < -15 || e.deltaX < -15) {
+                currentActiveIndex = (currentActiveIndex - 1 + totalSlides) % totalSlides;
+                updateCarousel();
+                lastWheelTime = now;
+            }
+        }, { passive: false });
 
         // --- Mouse / Touch Drag gesture support ---
         let startX = 0;
@@ -588,22 +608,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
             slides.forEach((slide) => {
                 if (slide.classList.contains('active-center')) {
-                    slide.style.transform = `translateX(${diffX * 0.55}px) scale(${1.0 - Math.abs(ratio) * 0.12}) translateZ(140px) rotateY(${-ratio * 12}deg)`;
-                    slide.style.opacity = `${1.0 - Math.abs(ratio) * 0.3}`;
+                    const translateX = diffX * 0.55;
+                    const scale = 1.0 - Math.abs(ratio) * 0.18;
+                    const opacity = 1.0 - Math.abs(ratio) * 0.4;
+                    const rotateY = -ratio * 12;
+                    slide.style.transform = `translateX(${translateX}px) scale(${scale}) translateZ(100px) rotateY(${rotateY}deg)`;
+                    slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
+                    slide.style.filter = `blur(${Math.min(Math.abs(ratio) * 2, 1)}px)`;
                 } else if (slide.classList.contains('left-behind')) {
-                    const scale = 0.72 + (ratio > 0 ? ratio * 0.28 : ratio * 0.1);
-                    const scaleClamped = Math.min(Math.max(scale, 0.55), 1.0);
-                    const opacity = 0.35 + (ratio > 0 ? ratio * 0.65 : ratio * -0.2);
-                    const translateXPercent = -44 + (ratio * 44);
-                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scaleClamped}) translateZ(${-160 + ratio * 300}px) rotateY(${16 - ratio * 16}deg)`;
+                    const scale = 0.82 + (ratio > 0 ? ratio * 0.18 : ratio * 0.1);
+                    const opacity = 0.6 + (ratio > 0 ? ratio * 0.4 : ratio * -0.25);
+                    const translateXPercent = -54 + (ratio * 54);
+                    const translateZ = 0 + (ratio > 0 ? ratio * 100 : ratio * -100);
+                    const rotateY = 12 - (ratio * 12);
+                    const blurVal = 1 - (ratio > 0 ? ratio * 1 : ratio * -1);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
                     slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
+                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
                 } else if (slide.classList.contains('right-behind')) {
-                    const scale = 0.72 + (ratio < 0 ? -ratio * 0.28 : -ratio * 0.1);
-                    const scaleClamped = Math.min(Math.max(scale, 0.55), 1.0);
-                    const opacity = 0.35 + (ratio < 0 ? -ratio * 0.65 : -ratio * -0.2);
-                    const translateXPercent = 44 + (ratio * 44);
-                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scaleClamped}) translateZ(${-160 - ratio * 300}px) rotateY(${-16 - ratio * 16}deg)`;
+                    const scale = 0.82 + (ratio < 0 ? -ratio * 0.18 : -ratio * 0.1);
+                    const opacity = 0.6 + (ratio < 0 ? -ratio * 0.4 : -ratio * -0.25);
+                    const translateXPercent = 54 + (ratio * 54);
+                    const translateZ = 0 - (ratio < 0 ? ratio * 100 : ratio * 100);
+                    const rotateY = -12 - (ratio * 12);
+                    const blurVal = 1 - (ratio < 0 ? -ratio * 1 : ratio * 1);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
                     slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
+                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
+                } else if (slide.classList.contains('disappeared-left')) {
+                    const scale = 0.72 + (ratio > 0 ? ratio * 0.1 : 0);
+                    const opacity = 0.35 + (ratio > 0 ? ratio * 0.25 : 0);
+                    const translateXPercent = -108 + (ratio > 0 ? ratio * 54 : 0);
+                    const translateZ = -100 + (ratio > 0 ? ratio * 100 : 0);
+                    const rotateY = 20 - (ratio > 0 ? ratio * 8 : 0);
+                    const blurVal = 2 - (ratio > 0 ? ratio * 1 : 0);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                    slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
+                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
+                } else if (slide.classList.contains('disappeared-right')) {
+                    const scale = 0.72 + (ratio < 0 ? -ratio * 0.1 : 0);
+                    const opacity = 0.35 + (ratio < 0 ? -ratio * 0.25 : 0);
+                    const translateXPercent = 108 + (ratio < 0 ? ratio * 54 : 0);
+                    const translateZ = -100 - (ratio < 0 ? ratio * 100 : 0);
+                    const rotateY = -20 - (ratio < 0 ? ratio * 8 : 0);
+                    const blurVal = 2 - (ratio < 0 ? -ratio * 1 : 0);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                    slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
+                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
                 }
             });
         };
@@ -613,10 +664,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isDragging = false;
             
             carouselContainer.classList.remove('dragging');
-            slides.forEach(slide => {
-                slide.style.transform = '';
-                slide.style.opacity = '';
-            });
 
             const endX = e.type.includes('touch') ? e.changedTouches[0].clientX : e.clientX;
             const diffX = startX - endX;
@@ -631,6 +678,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             updateCarousel();
             startAutoPlay();
+
+            // Clear temporary inline styles in a brief timeout to let CSS transition them perfectly
+            setTimeout(() => {
+                slides.forEach(slide => {
+                    slide.style.transform = '';
+                    slide.style.opacity = '';
+                    slide.style.filter = '';
+                });
+            }, 25);
         };
 
         // Event attachments for Desktop drag
