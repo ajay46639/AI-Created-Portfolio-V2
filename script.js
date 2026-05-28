@@ -608,53 +608,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
             slides.forEach((slide) => {
                 if (slide.classList.contains('active-center')) {
-                    const translateX = diffX * 0.55;
-                    const scale = 1.0 - Math.abs(ratio) * 0.18;
-                    const opacity = 1.0 - Math.abs(ratio) * 0.4;
-                    const rotateY = -ratio * 12;
-                    slide.style.transform = `translateX(${translateX}px) scale(${scale}) translateZ(100px) rotateY(${rotateY}deg)`;
+                    const translateX = diffX * 0.6;
+                    const scale = 1.0 - Math.abs(ratio) * 0.15;
+                    const opacity = 1.0 - Math.abs(ratio) * 0.35;
+                    slide.style.transform = `translateX(${translateX}px) scale(${scale}) translateZ(120px)`;
                     slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
-                    slide.style.filter = `blur(${Math.min(Math.abs(ratio) * 2, 1)}px)`;
+                    slide.style.filter = `blur(${Math.min(Math.abs(ratio) * 1.5, 1)}px)`;
                 } else if (slide.classList.contains('left-behind')) {
                     const scale = 0.82 + (ratio > 0 ? ratio * 0.18 : ratio * 0.1);
-                    const opacity = 0.6 + (ratio > 0 ? ratio * 0.4 : ratio * -0.25);
-                    const translateXPercent = -54 + (ratio * 54);
-                    const translateZ = 0 + (ratio > 0 ? ratio * 100 : ratio * -100);
-                    const rotateY = 12 - (ratio * 12);
-                    const blurVal = 1 - (ratio > 0 ? ratio * 1 : ratio * -1);
-                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                    const opacity = 0.5 + (ratio > 0 ? ratio * 0.5 : ratio * -0.2);
+                    const translateXPercent = -68 + (ratio * 68);
+                    const translateZ = 0 + (ratio > 0 ? ratio * 120 : ratio * -120);
+                    const blurVal = 1 - (ratio > 0 ? ratio * 1 : 0);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px)`;
                     slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
                     slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
                 } else if (slide.classList.contains('right-behind')) {
                     const scale = 0.82 + (ratio < 0 ? -ratio * 0.18 : -ratio * 0.1);
-                    const opacity = 0.6 + (ratio < 0 ? -ratio * 0.4 : -ratio * -0.25);
-                    const translateXPercent = 54 + (ratio * 54);
-                    const translateZ = 0 - (ratio < 0 ? ratio * 100 : ratio * 100);
-                    const rotateY = -12 - (ratio * 12);
-                    const blurVal = 1 - (ratio < 0 ? -ratio * 1 : ratio * 1);
-                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                    const opacity = 0.5 + (ratio < 0 ? -ratio * 0.5 : -ratio * -0.2);
+                    const translateXPercent = 68 + (ratio * 68);
+                    const translateZ = 0 - (ratio < 0 ? ratio * 120 : ratio * 120);
+                    const blurVal = 1 - (ratio < 0 ? -ratio * 1 : 0);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px)`;
                     slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
                     slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
                 } else if (slide.classList.contains('disappeared-left')) {
-                    const scale = 0.72 + (ratio > 0 ? ratio * 0.1 : 0);
-                    const opacity = 0.35 + (ratio > 0 ? ratio * 0.25 : 0);
-                    const translateXPercent = -108 + (ratio > 0 ? ratio * 54 : 0);
+                    const scale = 0.7 + (ratio > 0 ? ratio * 0.12 : 0);
+                    const opacity = 0.3 + (ratio > 0 ? ratio * 0.2 : 0);
+                    const translateXPercent = -115 + (ratio > 0 ? ratio * 47 : 0);
                     const translateZ = -100 + (ratio > 0 ? ratio * 100 : 0);
-                    const rotateY = 20 - (ratio > 0 ? ratio * 8 : 0);
-                    const blurVal = 2 - (ratio > 0 ? ratio * 1 : 0);
-                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                    const blurVal = 1 - (ratio > 0 ? ratio * 1 : 0);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px)`;
                     slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
-                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
+                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 1)}px)`;
                 } else if (slide.classList.contains('disappeared-right')) {
-                    const scale = 0.72 + (ratio < 0 ? -ratio * 0.1 : 0);
-                    const opacity = 0.35 + (ratio < 0 ? -ratio * 0.25 : 0);
-                    const translateXPercent = 108 + (ratio < 0 ? ratio * 54 : 0);
+                    const scale = 0.7 + (ratio < 0 ? -ratio * 0.12 : 0);
+                    const opacity = 0.3 + (ratio < 0 ? -ratio * 0.2 : 0);
+                    const translateXPercent = 115 + (ratio < 0 ? ratio * 47 : 0);
                     const translateZ = -100 - (ratio < 0 ? ratio * 100 : 0);
-                    const rotateY = -20 - (ratio < 0 ? ratio * 8 : 0);
-                    const blurVal = 2 - (ratio < 0 ? -ratio * 1 : 0);
-                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px) rotateY(${rotateY}deg)`;
+                    const blurVal = 1 - (ratio < 0 ? -ratio * 1 : 0);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scale}) translateZ(${translateZ}px)`;
                     slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
-                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 2)}px)`;
+                    slide.style.filter = `blur(${Math.min(Math.max(blurVal, 0), 1)}px)`;
                 }
             });
         };
@@ -667,7 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const endX = e.type.includes('touch') ? e.changedTouches[0].clientX : e.clientX;
             const diffX = startX - endX;
-            const threshold = 55; // Pixels required to trigger navigation
+            const threshold = 35; // Significantly reduced threshold for instant response
 
             if (diffX > threshold) {
                 // Dragged Left -> Show Next Slide
