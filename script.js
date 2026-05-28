@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Parallax Effect (Hero Profile Image) ---
     const heroSection = document.querySelector('.hero-section');
-    const profileImageFrame = document.querySelector('.profile-image-frame');
+    const profileImageFrame = document.querySelector('.profile-image-parallax-wrapper');
 
     if (heroSection && profileImageFrame) {
         let targetX = 0;
@@ -294,13 +294,18 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-                // For progress bars, trigger animation on reveal
+                // For progress bars, trigger animation on reveal if already container expanded
                 entry.target.querySelectorAll('.progress-bar').forEach(bar => {
-                    const width = bar.style.width; // Get target width from inline style
-                    bar.style.width = '0%'; // Reset to 0
-                    requestAnimationFrame(() => { // Re-apply after next render cycle
-                        bar.style.width = width;
-                    });
+                    const parentCategory = bar.closest('.skill-category');
+                    // Only animate if the category is expanded (either on desktop or if it has active class)
+                    const isExpanded = !parentCategory || parentCategory.classList.contains('active') || window.innerWidth > 992;
+                    if (isExpanded) {
+                        const width = bar.getAttribute('data-width') || bar.style.width;
+                        bar.style.width = '0%';
+                        requestAnimationFrame(() => {
+                            bar.style.width = width;
+                        });
+                    }
                 });
                 observer.unobserve(entry.target); // Unobserve once animated
             }
@@ -313,7 +318,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize progress bars (ensure they are 0% initially before JS takes over)
     document.querySelectorAll('.progress-bar').forEach(bar => {
+        const targetWidth = bar.style.width;
+        if (targetWidth && targetWidth !== '0%') {
+            bar.setAttribute('data-width', targetWidth);
+        }
         bar.style.width = '0%';
+    });
+
+    // --- Skills Accordion on Mobile ---
+    const skillCategories = document.querySelectorAll('.skill-category');
+    skillCategories.forEach(category => {
+        const header = category.querySelector('h3');
+        const clickHandler = (e) => {
+            if (window.innerWidth <= 992) {
+                e.stopPropagation();
+                const isActive = category.classList.contains('active');
+                
+                // Close all other categories
+                skillCategories.forEach(cat => {
+                    cat.classList.remove('active');
+                });
+                
+                if (!isActive) {
+                    category.classList.add('active');
+                    // Animate progress bars for this newly active category
+                    category.querySelectorAll('.progress-bar').forEach(bar => {
+                        const targetWidth = bar.getAttribute('data-width');
+                        if (targetWidth) {
+                            bar.style.width = '0%';
+                            requestAnimationFrame(() => {
+                                bar.style.width = targetWidth;
+                            });
+                        }
+                    });
+                }
+            }
+        };
+        if (header) {
+            header.addEventListener('click', clickHandler);
+        }
+    });
+
+    // Handle desktop hover transition for progress bars
+    skillCategories.forEach(category => {
+        category.addEventListener('mouseenter', () => {
+            if (window.innerWidth > 992) {
+                category.querySelectorAll('.progress-bar').forEach(bar => {
+                    const targetWidth = bar.getAttribute('data-width');
+                    if (targetWidth) {
+                        bar.style.width = '0%';
+                        requestAnimationFrame(() => {
+                            bar.style.width = targetWidth;
+                        });
+                    }
+                });
+            }
+        });
     });
 
 
@@ -468,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 3D Projects Stack Carousel (Image 1 visual alignment) ---
+    // --- 3D Projects Stack Carousel (Cinematic Draggable Boundary-Safe) ---
     const carouselContainer = document.getElementById('projects-carousel-container');
     const slides = document.querySelectorAll('.project-slide');
     const prevBtn = document.getElementById('prev-project-btn');
@@ -477,46 +537,74 @@ document.addEventListener('DOMContentLoaded', () => {
     if (carouselContainer && slides.length > 0) {
         let currentActiveIndex = 1; // Start with card 1 ("AI Chatbot Interface") as active
         const totalSlides = slides.length;
+        let autoPlayInterval = null;
+        let playDirection = 1; // 1 for forward, -1 for backward
 
         function updateCarousel() {
-            slides.forEach((slide, idx) => {
-                // Remove existing carousel alignment classes
-                slide.classList.remove('active-center', 'left-behind', 'right-behind', 'hidden-slide');
-
-                const relativeIndex = (idx - currentActiveIndex + totalSlides) % totalSlides;
-
-                if (relativeIndex === 0) {
-                    slide.classList.add('active-center');
-                } else if (relativeIndex === 1) {
-                    slide.classList.add('right-behind');
-                } else if (relativeIndex === totalSlides - 1) {
-                    slide.classList.add('left-behind');
+            // Disable or fade navigation buttons at extreme bounds to avoid infinite loop jumps
+            if (prevBtn) {
+                if (currentActiveIndex === 0) {
+                    prevBtn.style.opacity = '0.2';
+                    prevBtn.style.pointerEvents = 'none';
                 } else {
-                    slide.classList.add('hidden-slide');
+                    prevBtn.style.opacity = '1';
+                    prevBtn.style.pointerEvents = 'auto';
+                }
+            }
+            if (nextBtn) {
+                if (currentActiveIndex === totalSlides - 1) {
+                    nextBtn.style.opacity = '0.2';
+                    nextBtn.style.pointerEvents = 'none';
+                } else {
+                    nextBtn.style.opacity = '1';
+                    nextBtn.style.pointerEvents = 'auto';
+                }
+            }
+
+            slides.forEach((slide, idx) => {
+                // Clear state classes
+                slide.classList.remove('active-center', 'left-behind', 'right-behind', 'disappeared-left', 'disappeared-right', 'hidden-slide');
+
+                if (idx === currentActiveIndex) {
+                    slide.classList.add('active-center');
+                } else if (idx === currentActiveIndex - 1) {
+                    slide.classList.add('left-behind');
+                } else if (idx === currentActiveIndex + 1) {
+                    slide.classList.add('right-behind');
+                } else if (idx < currentActiveIndex) {
+                    slide.classList.add('disappeared-left');
+                } else {
+                    slide.classList.add('disappeared-right');
                 }
             });
         }
 
-        // Initialize state
+        // Initialize Carousel state
         updateCarousel();
 
         if (prevBtn) {
             prevBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                currentActiveIndex = (currentActiveIndex - 1 + totalSlides) % totalSlides;
-                updateCarousel();
+                if (currentActiveIndex > 0) {
+                    currentActiveIndex--;
+                    playDirection = -1; // Align auto-scroll back direction
+                    updateCarousel();
+                }
             });
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                currentActiveIndex = (currentActiveIndex + 1) % totalSlides;
-                updateCarousel();
+                if (currentActiveIndex < totalSlides - 1) {
+                    currentActiveIndex++;
+                    playDirection = 1; // Align auto-scroll forward direction
+                    updateCarousel();
+                }
             });
         }
 
-        // Jump to center on clicking offset slides
+        // Click side card to activate
         slides.forEach((slide, idx) => {
             slide.addEventListener('click', () => {
                 if (currentActiveIndex !== idx) {
@@ -525,6 +613,94 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+
+        // Slow cinematic autoplay (Reversible at boundaries instead of jumping)
+        function startAutoPlay() {
+            if (autoPlayInterval) return;
+            autoPlayInterval = setInterval(() => {
+                if (playDirection === 1) {
+                    if (currentActiveIndex < totalSlides - 1) {
+                        currentActiveIndex++;
+                    } else {
+                        playDirection = -1;
+                        currentActiveIndex--;
+                    }
+                } else {
+                    if (currentActiveIndex > 0) {
+                        currentActiveIndex--;
+                    } else {
+                        playDirection = 1;
+                        currentActiveIndex++;
+                    }
+                }
+                updateCarousel();
+            }, 5500); // Cinematic slow timing (5.5s)
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+        }
+
+        startAutoPlay();
+
+        // Pause autoplay on mouse hover
+        carouselContainer.addEventListener('mouseenter', stopAutoPlay);
+        carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+        // --- Mouse / Touch Drag gesture support ---
+        let startX = 0;
+        let isDragging = false;
+
+        const onDragStart = (e) => {
+            isDragging = true;
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            stopAutoPlay();
+        };
+
+        const onDragMove = (e) => {
+            if (!isDragging) return;
+            // Prevent dynamic browser behaviors on mobile pull while swiping
+            if (e.cancelable && e.type === 'touchmove') {
+                e.preventDefault();
+            }
+        };
+
+        const onDragEnd = (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            const endX = e.type.includes('touch') ? e.changedTouches[0].clientX : e.clientX;
+            const diffX = startX - endX;
+            const threshold = 55; // Pixels required to trigger navigation
+
+            if (diffX > threshold) {
+                // Dragged Left -> Show Next Slide
+                if (currentActiveIndex < totalSlides - 1) {
+                    currentActiveIndex++;
+                    playDirection = 1;
+                    updateCarousel();
+                }
+            } else if (diffX < -threshold) {
+                // Dragged Right -> Show Prev Slide
+                if (currentActiveIndex > 0) {
+                    currentActiveIndex--;
+                    playDirection = -1;
+                    updateCarousel();
+                }
+            }
+            startAutoPlay();
+        };
+
+        // Event attachments for Desktop drag
+        carouselContainer.addEventListener('mousedown', onDragStart);
+        window.addEventListener('mouseup', onDragEnd);
+
+        // Event attachments for Mobile/Tablet touch
+        carouselContainer.addEventListener('touchstart', onDragStart, { passive: true });
+        carouselContainer.addEventListener('touchmove', onDragMove, { passive: false });
+        carouselContainer.addEventListener('touchend', onDragEnd, { passive: true });
     }
 
     // Initial calls on page load

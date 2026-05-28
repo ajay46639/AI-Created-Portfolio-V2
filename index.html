@@ -92,9 +92,11 @@
                 <!-- Row 2 of Hero: Profile Image Left, Typewriter & Sub-desc & CTA Buttons Right -->
                 <div class="hero-details-row reveal">
                     <div class="hero-profile-cell">
-                        <div class="profile-image-frame parallax-element">
-                            <img src="images/profile.jpg" alt="Profile Image" class="profile-image">
-                            <div class="image-glow"></div>
+                        <div class="profile-image-parallax-wrapper">
+                            <div class="profile-image-frame">
+                                <img src="images/profile.jpg" alt="Profile Image" class="profile-image">
+                                <div class="image-glow"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="hero-main-action-cell">
@@ -104,7 +106,7 @@
                                 <span id="typewriter-text" class="typewriter"></span><span class="cursor">|</span>
                             </span>
                         </h1>
-                        <p class="intro-paragraph">Empowering innovation at the intersection of code, intelligence, and a futuristic vision. Crafting digital experiences that inspire and perform.</p>
+                        <p class="intro-paragraph">Built with logic, creativity, and intent.</p>
                         <div class="cta-buttons">
                             <a href="#projects" class="btn primary-btn animated-btn">View Projects</a>
                             <a href="#contact" class="btn secondary-btn animated-btn">Contact Me</a>
@@ -188,73 +190,87 @@
             <div class="skills-grid">
                 <!-- Programming -->
                 <div class="skill-category reveal">
-                    <h3>Programming</h3>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">Python</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 95%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">JavaScript</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 85%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">C++</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 70%;"></div></div>
+                    <h3><span>Programming</span> <i class="fas fa-chevron-down skill-arrow"></i></h3>
+                    <div class="skill-items-wrapper">
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">Python</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 95%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">JavaScript</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 85%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">C++</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 70%;"></div></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Web Development -->
                 <div class="skill-category reveal">
-                    <h3>Web Development</h3>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">HTML5</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 98%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">CSS3</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 90%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">Responsive Design</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 92%;"></div></div>
+                    <h3><span>Web Development</span> <i class="fas fa-chevron-down skill-arrow"></i></h3>
+                    <div class="skill-items-wrapper">
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">HTML5</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 98%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">CSS3</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 90%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">Responsive Design</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 92%;"></div></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Tools & Platforms -->
                 <div class="skill-category reveal">
-                    <h3>Tools & Platforms</h3>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">Git & GitHub</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 90%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">Docker</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 75%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">VS Code</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 95%;"></div></div>
+                    <h3><span>Tools & Platforms</span> <i class="fas fa-chevron-down skill-arrow"></i></h3>
+                    <div class="skill-items-wrapper">
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">Git & GitHub</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 90%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">Docker</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 75%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">VS Code</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 95%;"></div></div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- AI & Machine Learning -->
                 <div class="skill-category reveal">
-                    <h3>AI & ML</h3>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">TensorFlow</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 85%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">PyTorch</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 80%;"></div></div>
-                    </div>
-                    <div class="skill-item glowing-card">
-                        <span class="skill-name">Data Analysis</span>
-                        <div class="progress-bar-container"><div class="progress-bar" style="width: 90%;"></div></div>
+                    <h3><span>AI & ML</span> <i class="fas fa-chevron-down skill-arrow"></i></h3>
+                    <div class="skill-items-wrapper">
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">TensorFlow</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 85%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">PyTorch</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 80%;"></div></div>
+                        </div>
+                        <div class="skill-item glowing-card">
+                            <span class="skill-name">Data Analysis</span>
+                            <div class="progress-bar-container"><div class="progress-bar" style="width: 90%;"></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Connecting Punchline -->
+        <div class="skills-projects-punchline reveal">
+            <p>Skills are good. Projects prove them.</p>
+            <div class="punchline-line"></div>
+        </div>
 
         <!-- Projects Section -->
         <section id="projects" class="projects-section container">
@@ -311,6 +327,54 @@
                             <div class="project-links">
                                 <a href="https://github.com/ajay46639" target="_blank" class="btn small-btn github-btn">GitHub</a>
                                 <a href="https://www.live-demo2.com" target="_blank" class="btn small-btn demo-btn">Live Demo</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Slide 4: VOICE -->
+                    <div class="project-slide disappeared-right" data-index="3">
+                        <div class="project-watermark">VOICE</div>
+                        <div class="project-card-content">
+                            <h3>AI Voice Assistant</h3>
+                            <p class="project-description">Engineered a localized offline text-to-speech and speech-to-text voice agent to automate application commands and daily summaries.</p>
+                            <div class="project-tech-stack">
+                                <span>Python</span><span>OpenAI</span><span>SpeechRecognition</span><span>Pyttsx3</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/ajay46639" target="_blank" class="btn small-btn github-btn">GitHub</a>
+                                <a href="https://www.live-demo1.com" target="_blank" class="btn small-btn demo-btn">Live Demo</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Slide 5: FIN -->
+                    <div class="project-slide disappeared-right" data-index="4">
+                        <div class="project-watermark">FIN</div>
+                        <div class="project-card-content">
+                            <h3>Smart Financial Tracker</h3>
+                            <p class="project-description">Personal finance manager utilizing machine learning classifiers which parse expenses, auto-categorize receipts and forecast savings.</p>
+                            <div class="project-tech-stack">
+                                <span>Python</span><span>Django</span><span>Scikit-Learn</span><span>Pandas</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/ajay46639" target="_blank" class="btn small-btn github-btn">GitHub</a>
+                                <a href="https://www.live-demo2.com" target="_blank" class="btn small-btn demo-btn">Live Demo</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Slide 6: SCR -->
+                    <div class="project-slide disappeared-right" data-index="5">
+                        <div class="project-watermark">SCR</div>
+                        <div class="project-card-content">
+                            <h3>Autonomous Web Scraper</h3>
+                            <p class="project-description">Scalable concurrent crawler designed to scrap structural text and media data past dynamic anti-bot protection screens safely.</p>
+                            <div class="project-tech-stack">
+                                <span>Python</span><span>Scrapy</span><span>Selenium</span><span>BeautifulSoup</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://github.com/ajay46639" target="_blank" class="btn small-btn github-btn">GitHub</a>
+                                <a href="https://www.live-demo3.com" target="_blank" class="btn small-btn demo-btn">Live Demo</a>
                             </div>
                         </div>
                     </div>
@@ -373,7 +437,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 APCREATIONZ. built with passion by APCREATIONZ.</p>
+            <p>&copy; 2026 • Built with passion by Ajay Prajapati</p>
         </div>
     </footer>
 
