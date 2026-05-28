@@ -579,11 +579,45 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.cancelable && e.type === 'touchmove') {
                 e.preventDefault();
             }
+            const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const diffX = currentX - startX;
+            const containerWidth = carouselContainer.offsetWidth || 500;
+            const ratio = diffX / containerWidth;
+
+            carouselContainer.classList.add('dragging');
+
+            slides.forEach((slide) => {
+                if (slide.classList.contains('active-center')) {
+                    slide.style.transform = `translateX(${diffX * 0.55}px) scale(${1.0 - Math.abs(ratio) * 0.12}) translateZ(140px) rotateY(${-ratio * 12}deg)`;
+                    slide.style.opacity = `${1.0 - Math.abs(ratio) * 0.3}`;
+                } else if (slide.classList.contains('left-behind')) {
+                    const scale = 0.72 + (ratio > 0 ? ratio * 0.28 : ratio * 0.1);
+                    const scaleClamped = Math.min(Math.max(scale, 0.55), 1.0);
+                    const opacity = 0.35 + (ratio > 0 ? ratio * 0.65 : ratio * -0.2);
+                    const translateXPercent = -44 + (ratio * 44);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scaleClamped}) translateZ(${-160 + ratio * 300}px) rotateY(${16 - ratio * 16}deg)`;
+                    slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
+                } else if (slide.classList.contains('right-behind')) {
+                    const scale = 0.72 + (ratio < 0 ? -ratio * 0.28 : -ratio * 0.1);
+                    const scaleClamped = Math.min(Math.max(scale, 0.55), 1.0);
+                    const opacity = 0.35 + (ratio < 0 ? -ratio * 0.65 : -ratio * -0.2);
+                    const translateXPercent = 44 + (ratio * 44);
+                    slide.style.transform = `translateX(${translateXPercent}%) scale(${scaleClamped}) translateZ(${-160 - ratio * 300}px) rotateY(${-16 - ratio * 16}deg)`;
+                    slide.style.opacity = `${Math.min(Math.max(opacity, 0), 1)}`;
+                }
+            });
         };
 
         const onDragEnd = (e) => {
             if (!isDragging) return;
             isDragging = false;
+            
+            carouselContainer.classList.remove('dragging');
+            slides.forEach(slide => {
+                slide.style.transform = '';
+                slide.style.opacity = '';
+            });
+
             const endX = e.type.includes('touch') ? e.changedTouches[0].clientX : e.clientX;
             const diffX = startX - endX;
             const threshold = 55; // Pixels required to trigger navigation
@@ -591,17 +625,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (diffX > threshold) {
                 // Dragged Left -> Show Next Slide
                 currentActiveIndex = (currentActiveIndex + 1) % totalSlides;
-                updateCarousel();
             } else if (diffX < -threshold) {
                 // Dragged Right -> Show Prev Slide
                 currentActiveIndex = (currentActiveIndex - 1 + totalSlides) % totalSlides;
-                updateCarousel();
             }
+            updateCarousel();
             startAutoPlay();
         };
 
         // Event attachments for Desktop drag
         carouselContainer.addEventListener('mousedown', onDragStart);
+        carouselContainer.addEventListener('mousemove', onDragMove);
         window.addEventListener('mouseup', onDragEnd);
 
         // Event attachments for Mobile/Tablet touch

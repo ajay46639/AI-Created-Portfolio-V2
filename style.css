@@ -9,21 +9,21 @@
 
 /* --- Custom Properties (Variables) --- */
 :root {
-    --color-primary: #52e5ff; /* Accent primary */
-    --color-secondary: #9099ff; /* Soft Violet/Indigo */
-    --color-accent: #7ad3ff; /* Soft sky blue */
-    --color-background-dark: #070a13; /* Deep Dark Background */
-    --color-card-background: rgba(17, 24, 39, 0.7); /* Solid glassmorphism background precisely */
-    --color-glass-border: rgba(255, 255, 255, 0.08); /* Sophisticated thin border */
-    --color-text-light: #f3f4f6; /* Modern off-white */
-    --color-text-muted: #9ca3af; /* Modern neutral gray */
+    --color-primary: #52e5ff; /* Accent primary: Cyan */
+    --color-secondary: #ff73f0; /* Soft Hot Pink/Magenta */
+    --color-accent: #b53dff; /* Accent Violet/Indigo */
+    --color-background-dark: #030209; /* Deep cyber dark space obsidian background */
+    --color-card-background: rgba(10, 8, 22, 0.75); /* Solid glassmorphism background precisely */
+    --color-glass-border: rgba(82, 229, 255, 0.12); /* Cyan-tinted thin border */
+    --color-text-light: #f1f5f9; /* Modern off-white Slate */
+    --color-text-muted: #94a3b8; /* Modern neutral Slate gray */
     
-    --color-glow-primary: rgba(56, 189, 248, 0.15); /* Soft cyan glow */
-    --color-glow-secondary: rgba(144, 153, 255, 0.15);
+    --color-glow-primary: rgba(82, 229, 255, 0.22); /* Soft cyber cyan glow */
+    --color-glow-secondary: rgba(255, 115, 240, 0.18); /* Soft cyber magenta glow */
 
-    --gradient-hero: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(144, 153, 255, 0.15));
-    --gradient-button: linear-gradient(135deg, #38bdf8 0%, #9099ff 100%);
-    --gradient-button-hover: linear-gradient(135deg, #9099ff 0%, #38bdf8 100%);
+    --gradient-hero: linear-gradient(135deg, rgba(82, 229, 255, 0.18), rgba(255, 115, 240, 0.14));
+    --gradient-button: linear-gradient(135deg, #52e5ff 0%, #b53dff 50%, #ff73f0 100%);
+    --gradient-button-hover: linear-gradient(135deg, #ff73f0 0%, #b53dff 50%, #52e5ff 100%);
     --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
 
     --font-family-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -1045,30 +1045,30 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
 .projects-carousel {
     position: relative;
     width: 100%;
-    max-width: 950px;
-    height: 460px;
+    max-width: 1180px;  /* Polished larger desktop width */
+    height: 540px;      /* Polished larger desktop height */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Increased Card sizing for a more professional visual presentation */
+/* Sizable Cards (Middle active matching contact bento box width, side cards scaled & partially hidden) */
 .project-slide {
     position: absolute;
-    width: 380px;  /* Polished larger desktop width */
-    height: 440px; /* Polished larger desktop height */
-    background: rgba(7, 10, 19, 0.98);
+    width: 550px;  /* Polished larger desktop width matching the contact forms */
+    height: 500px; /* Polished larger desktop height for excellent balance */
+    background: rgba(10, 8, 22, 0.93);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--border-radius-lg);
-    transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.75s cubic-bezier(0.25, 1, 0.5, 1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
     overflow: hidden;
     cursor: grab;
     user-select: none;
-    -webkit-user-select: none; /* Prevents text selection on card drags precisely */
+    -webkit-user-select: none;
     will-change: transform, opacity;
     backface-visibility: hidden;
     transform-style: preserve-3d;
@@ -1078,54 +1078,59 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     cursor: grabbing;
 }
 
-/* 3D Stack effects */
+/* 3D Stack effects - Side cards are smaller, shifted, and partially transparent */
 .project-slide.left-behind {
-    transform: translateX(-40%) scale(0.82) translateZ(-130px) rotateY(18deg);
+    transform: translateX(-44%) scale(0.72) translateZ(-160px) rotateY(16deg);
     opacity: 0.35;
     z-index: 2;
     pointer-events: none;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .project-slide.active-center {
-    transform: translateX(0) scale(1.05) translateZ(120px) rotateY(0);
+    transform: translateX(0) scale(1.0) translateZ(140px) rotateY(0);
     opacity: 1;
     z-index: 5;
     pointer-events: auto;
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8),
-                0 0 35px rgba(56, 189, 248, 0.15),
-                0 0 70px rgba(144, 153, 255, 0.1);
-    background: linear-gradient(135deg, rgba(8, 12, 21, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%);
+    border: 1px solid rgba(82, 229, 255, 0.35);
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.85),
+                0 0 35px rgba(82, 229, 255, 0.2),
+                0 0 70px rgba(255, 115, 240, 0.12);
+    background: linear-gradient(135deg, rgba(8, 6, 18, 0.96) 0%, rgba(18, 12, 32, 0.96) 100%);
 }
 
 .project-slide.right-behind {
-    transform: translateX(40%) scale(0.82) translateZ(-130px) rotateY(-18deg);
+    transform: translateX(44%) scale(0.72) translateZ(-160px) rotateY(-16deg);
     opacity: 0.35;
     z-index: 2;
     pointer-events: none;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .project-slide.disappeared-left {
-    transform: translateX(-140%) scale(0.65) translateZ(-250px) rotateY(30deg);
+    transform: translateX(-150%) scale(0.55) translateZ(-280px) rotateY(25deg);
     opacity: 0;
     pointer-events: none;
     z-index: 1;
 }
 
 .project-slide.disappeared-right {
-    transform: translateX(140%) scale(0.65) translateZ(-250px) rotateY(-30deg);
+    transform: translateX(150%) scale(0.55) translateZ(-280px) rotateY(-25deg);
     opacity: 0;
     pointer-events: none;
     z-index: 1;
 }
 
 .project-slide.hidden-slide {
-    transform: scale(0.5) translateZ(-400px);
+    transform: scale(0.4) translateZ(-450px);
     opacity: 0;
     pointer-events: none;
     z-index: 1;
+}
+
+/* Instant tracking override while dragging cards */
+.projects-carousel.dragging .project-slide {
+    transition: none !important;
 }
 
 /* Backdrop watermark overlaying background behind cover image */
@@ -1659,6 +1664,20 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     }
     .prev-control { left: -10px; }
     .next-control { right: -10px; }
+
+    .projects-carousel {
+        height: 490px;
+    }
+    .project-slide {
+        width: 430px;
+        height: 450px;
+    }
+    .project-slide.left-behind {
+        transform: translateX(-38%) scale(0.78) translateZ(-110px);
+    }
+    .project-slide.right-behind {
+        transform: translateX(38%) scale(0.78) translateZ(-110px);
+    }
 }
 
 @media (max-width: 768px) {
@@ -1697,18 +1716,23 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
         grid-template-columns: 1fr;
     }
     
+    .projects-carousel {
+        height: 440px;
+    }
     .project-slide {
-        width: 320px;
-        height: 410px;
+        width: 310px;
+        height: 400px;
         padding: 0;
     }
     
     .project-slide.left-behind {
-        transform: translateX(-35%) scale(0.8) translateZ(-100px);
+        transform: translateX(-30%) scale(0.75) translateZ(-80px);
+        opacity: 0.22;
     }
     
     .project-slide.right-behind {
-        transform: translateX(35%) scale(0.8) translateZ(-100px);
+        transform: translateX(30%) scale(0.75) translateZ(-80px);
+        opacity: 0.22;
     }
 }
 
