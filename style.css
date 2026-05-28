@@ -9,10 +9,10 @@
 
 /* --- Custom Properties (Variables) --- */
 :root {
-    --color-primary: #bd53ff; /* Accent primary */
-    --color-secondary: #00ffbf; /* Soft Violet/Indigo */
-    --color-accent: #ff2d7a; /* Soft sky blue */
-    --color-background-dark: #0b0616; /* Deep Dark Background */
+    --color-primary: #52e5ff; /* Accent primary */
+    --color-secondary: #9099ff; /* Soft Violet/Indigo */
+    --color-accent: #7ad3ff; /* Soft sky blue */
+    --color-background-dark: #070a13; /* Deep Dark Background */
     --color-card-background: rgba(17, 24, 39, 0.7); /* Solid glassmorphism background precisely */
     --color-glass-border: rgba(255, 255, 255, 0.08); /* Sophisticated thin border */
     --color-text-light: #f3f4f6; /* Modern off-white */
@@ -989,15 +989,15 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
 }
 
 /* On Mobile Drawer States click toggling */
-.skill-category.active .skill-items-wrapper {
+.skill-category.expanded .skill-items-wrapper {
     max-height: 400px;
     opacity: 1;
     margin-top: 1.8rem;
 }
-.skill-category.active h3 {
+.skill-category.expanded h3 {
     color: #ffffff;
 }
-.skill-category.active .skill-arrow {
+.skill-category.expanded .skill-arrow {
     transform: rotate(180deg);
     color: var(--color-primary);
 }
@@ -1057,7 +1057,7 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     position: absolute;
     width: 380px;  /* Polished larger desktop width */
     height: 440px; /* Polished larger desktop height */
-    background: rgba(13, 17, 24, 0.93);
+    background: rgba(7, 10, 19, 0.98);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--border-radius-lg);
     transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
@@ -1067,9 +1067,11 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.65);
     overflow: hidden;
     cursor: grab;
-    backdrop-filter: blur(10px);
     user-select: none;
     -webkit-user-select: none; /* Prevents text selection on card drags precisely */
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
 }
 
 .project-slide:active {
@@ -1079,10 +1081,9 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
 /* 3D Stack effects */
 .project-slide.left-behind {
     transform: translateX(-40%) scale(0.82) translateZ(-130px) rotateY(18deg);
-    opacity: 0.45;
+    opacity: 0.35;
     z-index: 2;
     pointer-events: none;
-    filter: blur(2px);
     border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -1091,21 +1092,18 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     opacity: 1;
     z-index: 5;
     pointer-events: auto;
-    filter: none;
     border: 1px solid rgba(56, 189, 248, 0.3);
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8),
                 0 0 35px rgba(56, 189, 248, 0.15),
                 0 0 70px rgba(144, 153, 255, 0.1);
-    backdrop-filter: blur(10px);
-    background: linear-gradient(135deg, rgba(8, 12, 21, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+    background: linear-gradient(135deg, rgba(8, 12, 21, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%);
 }
 
 .project-slide.right-behind {
     transform: translateX(40%) scale(0.82) translateZ(-130px) rotateY(-18deg);
-    opacity: 0.45;
+    opacity: 0.35;
     z-index: 2;
     pointer-events: none;
-    filter: blur(2px);
     border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -1114,7 +1112,6 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     opacity: 0;
     pointer-events: none;
     z-index: 1;
-    filter: blur(6px);
 }
 
 .project-slide.disappeared-right {
@@ -1122,7 +1119,6 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     opacity: 0;
     pointer-events: none;
     z-index: 1;
-    filter: blur(6px);
 }
 
 .project-slide.hidden-slide {
@@ -1314,12 +1310,14 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     width: 100%;
 }
 
-.contact-form-card,\n.social-links-card {
+.contact-form-card,
+.social-links-card {
     padding: 3rem;
     width: 100%;
 }
 
-.contact-form-card h3,\n.social-links-card h3 {
+.contact-form-card h3,
+.social-links-card h3 {
     color: var(--color-primary);
     margin-bottom: 2rem;
     font-size: 1.7rem;
@@ -1336,7 +1334,8 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     font-weight: 500;
 }
 
-.form-group input,\n.form-group textarea {
+.form-group input,
+.form-group textarea {
     width: 100%;
     padding: 1rem 1.2rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -1348,14 +1347,16 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.form-group input:focus,\n.form-group textarea:focus {
+.form-group input:focus,
+.form-group textarea:focus {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(82, 229, 255, 0.2);
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.form-group input::placeholder,\n.form-group textarea::placeholder {
+.form-group input::placeholder,
+.form-group textarea::placeholder {
     color: var(--color-text-muted);
     opacity: 0.65;
 }
@@ -1415,7 +1416,8 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
 .social-bento-link:hover {
     transform: translateY(-5px);
     border-color: var(--color-primary);
-    box-shadow: 0 10px 30px rgba(82, 229, 255, 0.2),\n                0 0 15px rgba(82, 229, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(82, 229, 255, 0.2),
+                0 0 15px rgba(82, 229, 255, 0.1);
     background: rgba(18, 25, 38, 0.85);
 }
 
@@ -1676,7 +1678,10 @@ body.nav-open .hamburger-menu .bar:nth-child(3) {
         margin-bottom: 3rem;
     }
 
-    .about-section,\n    .skills-section,\n    .projects-section,\n    .contact-section {
+    .about-section,
+    .skills-section,
+    .projects-section,
+    .contact-section {
         padding: 5rem 0;
     }
 
